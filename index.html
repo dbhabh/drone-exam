@@ -115,6 +115,116 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .wp-controls button.active{background:var(--primary);color:#fff;border-color:var(--primary)}
 @media(max-width:768px){.app-sidebar{width:180px}.app-sidebar .nav-item{padding:10px 14px;font-size:.82rem}.app-main{padding:16px}.chapter-grid{grid-template-columns:1fr}.stats-row{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:480px){.app-layout{flex-direction:column}.app-sidebar{width:100%;display:flex;overflow-x:auto;padding:8px 0;border-right:none;border-bottom:1px solid var(--border)}.app-sidebar .nav-item{white-space:nowrap;border-left:none;border-bottom:2px solid transparent;padding:8px 12px}.app-sidebar .nav-item.active{border-left:none;border-bottom-color:var(--primary)}.app-main{padding:12px}.stats-row{grid-template-columns:1fr 1fr}.chapter-grid{grid-template-columns:1fr}}
+
+/* ====== UI ENHANCE ANIMATIONS ====== */
+@keyframes fadeInUp { from { opacity:0; transform:translateY(20px); } to { opacity:1; transform:translateY(0); } }
+@keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+@keyframes pulseGlow { 0%,100% { opacity:0.6; } 50% { opacity:1; } }
+@keyframes ripple { to { transform:scale(4); opacity:0; } }
+@keyframes skeletonPulse { 0% { background-position:200% 0; } 100% { background-position:-200% 0; } }
+@keyframes slideUp { from { opacity:0; transform:translateY(16px); } to { opacity:1; transform:translateY(0); } }
+@keyframes countUp { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+@keyframes breathPulse { 0%,100% { box-shadow:0 0 0 0 rgba(30,58,95,0.15); } 50% { box-shadow:0 0 0 6px rgba(30,58,95,0.05); } }
+@keyframes checkmark { 0% { transform:scale(0) rotate(-45deg); } 100% { transform:scale(1) rotate(0); } }
+@keyframes shimmer { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
+@keyframes toastIn { from { opacity:0; transform:translateX(100px); } to { opacity:1; transform:translateX(0); } }
+@keyframes toastOut { from { opacity:1; transform:translateX(0); } to { opacity:0; transform:translateX(100px); } }
+@keyframes scaleIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+@keyframes spin { to { transform:rotate(360deg); } }
+
+/* Skeleton Screen */
+.skeleton{background:linear-gradient(90deg,#e2e8f0 25%,#f1f5f9 50%,#e2e8f0 75%);background-size:200% 100%;animation:skeletonPulse 1.5s ease infinite;border-radius:6px}
+.skeleton-card{height:120px;margin-bottom:16px}
+.skeleton-line{height:16px;margin-bottom:10px;width:100%}
+.skeleton-line.w60{width:60%}.skeleton-line.w40{width:40%}
+
+/* Toast */
+.toast-container{position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px}
+.toast{padding:12px 20px;border-radius:var(--radius-sm);color:#fff;font-size:.85rem;font-weight:500;animation:toastIn .3s ease forwards;box-shadow:0 8px 24px rgba(0,0,0,0.12);display:flex;align-items:center;gap:8px;max-width:360px}
+.toast.toast-out{animation:toastOut .3s ease forwards}
+.toast-success{background:#166534}
+.toast-error{background:#991b1b}
+.toast-info{background:#1e40af}
+.toast-warning{background:#92400e}
+
+/* Ripple */
+.ripple-btn{position:relative;overflow:hidden}
+.ripple-btn::after{content:"";position:absolute;width:100%;padding-top:100%;border-radius:50%;background:rgba(255,255,255,0.3);transform:scale(0);opacity:0;pointer-events:none;left:var(--x,50%);top:var(--y,50%);transform-origin:center}
+.ripple-btn:active::after{animation:ripple .5s ease-out}
+
+/* Enhanced hover effects */
+.btn{transition:all .25s cubic-bezier(0.4,0,0.2,1)}
+.chapter-card{transition:all .3s cubic-bezier(0.4,0,0.2,1)}
+.chapter-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.1)}
+.q-option{transition:all .2s cubic-bezier(0.4,0,0.2,1)}
+.q-option:hover{transform:scale(1.01);border-color:var(--primary-light)}
+.nav-item{transition:all .2s cubic-bezier(0.4,0,0.2,1)}
+.card{animation:fadeInUp .35s ease both}
+.card:nth-child(2){animation-delay:0.05s}.card:nth-child(3){animation-delay:0.1s}.card:nth-child(4){animation-delay:0.15s}
+
+/* Login page enhanced */
+.login-box{animation:scaleIn .4s cubic-bezier(0.4,0,0.2,1) both}
+.login-page::before{animation:pulseGlow 4s ease-in-out infinite}
+.login-logo{animation:fadeIn .6s ease both;display:inline-block}
+.login-logo:hover{transform:scale(1.05) rotate(-5deg);transition:transform .3s}
+
+/* Chapter grid */
+.chapter-grid{animation:fadeIn .3s ease both}
+.ch-bar-fill{transition:width .8s cubic-bezier(0.4,0,0.2,1)}
+
+/* Stats */
+.stat-num{animation:countUp .5s ease both}
+.stat-card:nth-child(1) .stat-num{animation-delay:0s}
+.stat-card:nth-child(2) .stat-num{animation-delay:0.08s}
+.stat-card:nth-child(3) .stat-num{animation-delay:0.16s}
+.stat-card:nth-child(4) .stat-num{animation-delay:0.24s}
+
+/* Analysis panel */
+.analysis-panel{animation:slideUp .3s cubic-bezier(0.4,0,0.2,1) both}
+
+/* Question navigator */
+.q-nav-btn.active{animation:breathPulse 2s ease-in-out infinite}
+
+/* Exam timer */
+.exam-timer .timer-num{display:inline-block;font-weight:700;min-width:2ch;text-align:center}
+
+/* Wrong book stagger */
+.wrong-item{animation:fadeInUp .3s ease both}
+.wrong-item:nth-child(1){animation-delay:0s}.wrong-item:nth-child(2){animation-delay:0.05s}
+.wrong-item:nth-child(3){animation-delay:0.1s}.wrong-item:nth-child(4){animation-delay:0.15s}
+.wrong-item:nth-child(5){animation-delay:0.2s}
+
+/* Scrollbar */
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:3px}
+::-webkit-scrollbar-thumb:hover{background:#94a3b8}
+
+/* Main content transition */
+.app-main{transition:opacity .2s ease}
+.app-main.fade-in{animation:fadeInUp .3s ease both}
+
+/* Student row hover */
+.student-row{transition:all .2s cubic-bezier(0.4,0,0.2,1)}
+.student-row:hover{transform:translateX(4px)}
+
+/* Modal overlay */
+.modal-overlay{animation:fadeIn .2s ease both}
+.modal-content{animation:scaleIn .25s cubic-bezier(0.4,0,0.2,1) both}
+
+/* Empty state */
+.empty-state{animation:fadeInUp .4s ease both}
+
+/* Share link */
+.share-link{transition:all .2s}
+.share-link:hover{background:#e2e8f0}
+
+/* Chapter card checkmark */
+.ch-check{transition:all .3s cubic-bezier(0.4,0,0.2,1)}
+.ch-check.done{animation:checkmark .4s cubic-bezier(0.4,0,0.2,1)}
+
+/* Loading spinner */
+.spinner{width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
 </style>
 </head>
 <body>
@@ -125,6 +235,95 @@ const CHAPTERS = [{"ch": 1, "name": "无人机概述", "count": 19}, {"ch": 2, "
 
 var state = { user:null, page:"home" };
 var loginTab = "student";
+
+
+// ====== UI ENHANCE: Toast System ======
+function showToast(msg, type) {
+  type = type || "info";
+  var c = document.querySelector(".toast-container");
+  if(!c) {
+    c = document.createElement("div");
+    c.className = "toast-container";
+    document.body.appendChild(c);
+  }
+  var t = document.createElement("div");
+  t.className = "toast toast-" + type;
+  var icons = {success:"✓",error:"✗",info:"ℹ",warning:"⚠"};
+  t.innerHTML = (icons[type] || "ℹ") + " " + msg;
+  c.appendChild(t);
+  setTimeout(function() {
+    t.className += " toast-out";
+    setTimeout(function() { if(t.parentNode) t.parentNode.removeChild(t); }, 300);
+  }, 2500);
+}
+
+// ====== UI ENHANCE: Stats Count Up ======
+function animateCount(el, target) {
+  if(!el) return;
+  var start = 0, duration = 600, step = Math.max(1, Math.floor(target / 30));
+  function tick() {
+    start += step;
+    if(start >= target) { el.textContent = target; return; }
+    el.textContent = start;
+    requestAnimationFrame(tick);
+  }
+  tick();
+}
+
+// ====== UI ENHANCE: Ripple Effect ======
+function addRipple(e) {
+  var btn = e.currentTarget;
+  var rect = btn.getBoundingClientRect();
+  var x = ((e.clientX || e.touches?.[0]?.clientX || rect.left + rect.width/2) - rect.left) / rect.width * 100;
+  var y = ((e.clientY || e.touches?.[0]?.clientY || rect.top + rect.height/2) - rect.top) / rect.height * 100;
+  btn.style.setProperty("--x", x + "%");
+  btn.style.setProperty("--y", y + "%");
+}
+
+// Add ripple to all buttons
+function initRipple() {
+  document.querySelectorAll(".btn").forEach(function(b) {
+    b.classList.add("ripple-btn");
+    b.addEventListener("mousedown", addRipple);
+  });
+}
+
+// ====== UI ENHANCE: Enhanced Render with Fade ======
+var _origRenderHome = null;
+var _origRenderCP = null;
+var _origRenderWB = null;
+
+// Override renderHome to add count-up animation
+var _origRender = render;
+render = function() {
+  // Add ripple to any new buttons after render
+  var mc = document.getElementById("mainContent");
+  if(mc) mc.classList.remove("fade-in");
+  _origRender();
+  setTimeout(function() {
+    initRipple();
+    var mc2 = document.getElementById("mainContent");
+    if(mc2) mc2.classList.add("fade-in");
+    // Count up animation for stats
+    document.querySelectorAll(".stat-num").forEach(function(el) {
+      var t = parseInt(el.textContent);
+      if(!isNaN(t) && t > 0 && t < 10000) animateCount(el, t);
+    });
+  }, 50);
+};
+
+// Override setNav to add ripple to nav items
+var _origSetNav = setNav;
+setNav = function() {
+  _origSetNav();
+  document.querySelectorAll(".nav-item").forEach(function(n) {
+    n.addEventListener("click", function() {
+      document.querySelectorAll(".nav-item").forEach(function(x) { x.classList.remove("active"); });
+      this.classList.add("active");
+    });
+  });
+};
+
 
 function esc(s) {
   if(typeof s !== "string") return "";
