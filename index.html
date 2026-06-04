@@ -225,6 +225,28 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 
 /* Loading spinner */
 .spinner{width:24px;height:24px;border:3px solid var(--border);border-top-color:var(--primary);border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+
+/* ====== AI ENHANCE ANIMATIONS ====== */
+.anim-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;border:2px solid var(--primary-light);border-radius:var(--radius-sm);background:transparent;color:var(--primary);font-size:.82rem;font-weight:600;cursor:pointer;transition:all .2s;margin-top:10px}
+.anim-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.anim-btn:active{transform:scale(0.96)}
+.anim-modal{position:fixed;inset:0;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;z-index:2000;backdrop-filter:blur(4px);animation:fadeIn .2s ease both}
+.anim-modal.open{display:flex}
+.anim-modal-box{background:#fff;border-radius:16px;width:90%;max-width:720px;max-height:90vh;overflow:hidden;box-shadow:0 24px 60px rgba(0,0,0,0.3);animation:scaleIn .3s cubic-bezier(0.4,0,0.2,1) both}
+.anim-modal-header{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--border);background:var(--primary);color:#fff}
+.anim-modal-header h3{font-size:.95rem;font-weight:600}
+.anim-modal-close{background:none;border:none;color:rgba(255,255,255,0.7);font-size:1.3rem;cursor:pointer;padding:0 4px;transition:color .2s}
+.anim-modal-close:hover{color:#fff}
+.anim-canvas-wrap{position:relative;width:100%;padding-top:56.25%;background:#0a0f1a}
+.anim-canvas-wrap canvas{position:absolute;inset:0;width:100%;height:100%}
+.anim-controls{display:flex;gap:8px;padding:12px 20px;border-top:1px solid var(--border);justify-content:center;background:#f8fafc}
+.anim-controls button{padding:6px 16px;border-radius:6px;border:1px solid var(--border);background:#fff;cursor:pointer;font-size:.8rem;transition:all .15s}
+.anim-controls button:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+.anim-controls button:active{transform:scale(0.95)}
+.anim-legend{position:absolute;bottom:12px;left:12px;background:rgba(0,0,0,0.7);color:#fff;padding:8px 12px;border-radius:6px;font-size:.7rem;line-height:1.6;pointer-events:none;z-index:2}
+.anim-legend span{display:inline-flex;align-items:center;gap:4px;margin-right:8px}
+.anim-legend .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.analysis-panel .anim-trigger{text-align:right;margin-top:8px}
 </style>
 </head>
 <body>
@@ -628,7 +650,7 @@ function renderCP() {
       "<div style=\"margin-bottom:6px;\">" +
       (sel === q.ans ? "<span class=\"analysis-correct\">&#x2713; 回答正确！</span>" : "<span class=\"analysis-wrong\">&#x2717; 回答错误</span>") +
       " 正确答案：<strong>" + lb[q.ans] + ". " + esc(q.opts[q.ans]) + "</strong></div>" +
-      "<div style=\"color:#334155;\">" + esc(q.exp || "暂无解析") + "</div></div>";
+      "<div style=\"color:#334155;\">" + esc(q.exp || "暂无解析") + '</div><div class="anim-trigger"><button class="anim-btn" onclick="showAnimModal(' + q.id + ')">\uD83D\uDCD0 \u67E5\u770B\u539F\u7406\u52A8\u753B</button></div></div>';
   }
   h += "</div>";
   h += "<div class=\"card\"><div class=\"q-nav\">";
@@ -888,7 +910,7 @@ function renderExamR() {
         "<div class=\"wi-info\"><span class=\"badge badge-info\" style=\"margin-right:6px;\">第" + q.ch + "章</span>" +
         "你的答案：" + lb[w.selected] + "." + esc(q.opts[w.selected] || "未知") +
         " <span style=\"color:var(--success);font-weight:600;\">正确答案：" + lb[q.ans] + "." + esc(q.opts[q.ans]) + "</span></div>" +
-        "<div class=\"wi-info\" style=\"margin-top:4px;color:#0369a1;\">&#x1F4A1; " + esc(q.exp || "暂无解析") + "</div></div>";
+        "<div class=\"wi-info\" style=\"margin-top:4px;color:#0369a1;\">&#x1F4A1; " + esc(q.exp || "暂无解析") + '</div><div class="anim-trigger"><button class="anim-btn" onclick="showAnimModal(' + q.id + ')">\uD83D\uDCD0 \u67E5\u770B\u539F\u7406\u52A8\u753B</button></div></div>';
     }
   }
   document.getElementById("mainContent").innerHTML = h;
@@ -952,7 +974,7 @@ function renderWP() {
       "<div style=\"margin-bottom:6px;\">" +
       (sel === q.ans ? "<span class=\"analysis-correct\">&#x2713; 回答正确！</span>" : "<span class=\"analysis-wrong\">&#x2717; 回答错误</span>") +
       " 正确答案：<strong>" + lb[q.ans] + ". " + esc(q.opts[q.ans]) + "</strong></div>" +
-      "<div style=\"color:#334155;\">" + esc(q.exp || "暂无解析") + "</div></div>";
+      "<div style=\"color:#334155;\">" + esc(q.exp || "暂无解析") + '</div><div class="anim-trigger"><button class="anim-btn" onclick="showAnimModal(' + q.id + ')">\uD83D\uDCD0 \u67E5\u770B\u539F\u7406\u52A8\u753B</button></div></div>';
   }
   h += "</div>";
   document.getElementById("mainContent").innerHTML = h;
@@ -1013,7 +1035,7 @@ function wpNext() {
       "<div style=\"margin-bottom:6px;\">" +
       (sel === q.ans ? "<span class=\"analysis-correct\">&#x2713; 回答正确！</span>" : "<span class=\"analysis-wrong\">&#x2717; 回答错误</span>") +
       " 正确答案：<strong>" + lb[q.ans] + ". " + esc(q.opts[q.ans]) + "</strong></div>" +
-      "<div style=\"color:#334155;\">" + esc(q.exp || "暂无解析") + "</div></div>";
+      "<div style=\"color:#334155;\">" + esc(q.exp || "暂无解析") + '</div><div class="anim-trigger"><button class="anim-btn" onclick="showAnimModal(' + q.id + ')">\uD83D\uDCD0 \u67E5\u770B\u539F\u7406\u52A8\u753B</button></div></div>';
   }
   h2 += "</div>";
   document.getElementById("mainContent").innerHTML = h2;
@@ -1122,6 +1144,303 @@ function handleHash() {
     state.page = "sq";
     render();
   }
+}
+
+const Q_ANIM_MAP={"1": "structure", "2": "structure", "3": "structure", "4": "structure", "5": "structure", "6": "structure", "7": "structure", "8": "structure", "9": "structure", "10": "structure", "11": "structure", "12": "structure", "13": "structure", "14": "structure", "15": "structure", "16": "structure", "17": "structure", "18": "structure", "19": "structure", "20": "structure", "21": "structure", "22": "structure", "23": "structure", "24": "structure", "25": "structure", "26": "structure", "27": "structure", "28": "structure", "29": "structure", "30": "structure", "31": "structure", "32": "structure", "33": "structure", "34": "structure", "35": "structure", "36": "structure", "37": "structure", "38": "structure", "39": "structure", "40": "structure", "41": "structure", "42": "structure", "43": "structure", "44": "structure", "45": "structure", "46": "structure", "47": "structure", "48": "structure", "49": "structure", "50": "structure", "51": "structure", "52": "structure", "53": "structure", "54": "structure", "55": "structure", "56": "structure", "57": "structure", "58": "structure", "59": "structure", "60": "structure", "61": "structure", "62": "structure", "63": "structure", "64": "structure", "65": "structure", "66": "structure", "67": "structure", "68": "structure", "69": "structure", "70": "structure", "71": "structure", "72": "structure", "73": "structure", "74": "structure", "75": "structure", "76": "structure", "77": "structure", "78": "structure", "79": "structure", "80": "flight", "81": "flight", "82": "flight", "83": "flight", "84": "flight", "85": "flight", "86": "flight", "87": "flight", "88": "flight", "89": "flight", "90": "flight", "91": "flight", "92": "flight", "93": "flight", "94": "flight", "95": "flight", "96": "flight", "97": "flight", "98": "flight", "99": "flight", "100": "flight", "101": "flight", "102": "flight", "103": "flight", "104": "flight", "105": "flight", "106": "flight", "107": "flight", "108": "flight", "109": "flight", "110": "flight", "111": "flight", "112": "flight", "113": "flight", "114": "flight", "115": "flight", "116": "flight", "117": "flight", "118": "flight", "119": "flight", "120": "flight", "121": "flight", "122": "flight", "123": "flight", "124": "flight", "125": "flight", "126": "flight", "127": "flight", "128": "flight", "129": "flight", "130": "flight", "131": "flight", "132": "flight", "133": "flight", "134": "flight", "135": "flight", "136": "flight", "137": "flight", "138": "flight", "139": "flight", "140": "flight", "141": "flight", "142": "flight", "143": "flight", "144": "flight", "145": "flight", "146": "flight", "147": "flight", "148": "flight", "149": "flight", "150": "flight", "151": "flight", "152": "flight", "153": "flight", "154": "flight", "155": "flight", "156": "flight", "157": "flight", "158": "flight", "159": "flight", "160": "flight", "161": "flight", "162": "flight", "163": "flight", "164": "flight", "165": "flight", "166": "flight", "167": "flight", "168": "flight", "169": "flight", "170": "flight", "171": "flight", "172": "flight", "173": "flight", "174": "flight", "175": "flight", "176": "flight", "177": "flight", "178": "flight", "179": "flight", "180": "flight", "181": "flight", "182": "flight", "183": "flight", "184": "flight", "185": "flight", "186": "flight", "187": "flight", "188": "flight", "189": "flight", "190": "flight", "191": "flight", "192": "flight", "193": "flight", "194": "flight", "195": "flight", "196": "flight", "197": "flight", "198": "flight", "199": "flight", "200": "flight", "201": "flight", "202": "flight", "203": "flight", "204": "flight", "205": "flight", "206": "flight", "207": "flight", "208": "flight", "209": "flight", "210": "flight", "211": "flight", "212": "flight", "213": "flight", "214": "flight", "215": "flight", "216": "flight", "217": "flight", "218": "flight", "219": "flight", "220": "flight", "221": "flight", "222": "flight", "223": "flight", "224": "flight", "225": "flight", "226": "flight", "227": "flight", "228": "flight", "229": "flight", "230": "flight", "231": "flight", "232": "flight", "233": "flight", "234": "flight", "235": "flight", "236": "flight", "237": "flight", "238": "flight", "239": "flight", "240": "flight", "241": "flight", "242": "flight", "243": "flight", "244": "flight", "245": "flight", "246": "flight", "247": "flight", "248": "flight", "249": "flight", "250": "flight", "251": "flight", "252": "flight", "253": "flight", "254": "flight", "255": "flight", "256": "flight", "257": "flight", "258": "flight", "259": "flight", "260": "flight", "261": "flight", "262": "flight", "263": "flight", "264": "flight", "265": "flight", "266": "flight", "267": "flight", "268": "flight", "269": "flight", "270": "flight", "271": "flight", "272": "flight", "273": "flight", "274": "flight", "275": "flight", "276": "flight", "277": "flight", "278": "flight", "279": "flight", "280": "flight", "281": "flight", "282": "flight", "283": "flight", "284": "flight", "285": "flight", "286": "flight", "287": "flight", "288": "flight", "289": "flight", "290": "flight", "291": "flight", "292": "flight", "293": "flight", "294": "flight", "295": "flight", "296": "flight", "297": "flight", "298": "flight", "299": "flight", "300": "flight", "301": "flight", "302": "flight", "303": "flight", "304": "flight", "305": "flight", "306": "flight", "307": "flight", "308": "flight", "309": "flight", "310": "flight", "311": "flight", "312": "flight", "313": "flight", "314": "flight", "315": "flight", "316": "flight", "317": "flight", "318": "flight", "319": "flight", "320": "flight", "321": "flight", "322": "flight", "323": "flight", "324": "flight", "325": "flight", "326": "flight", "327": "flight", "328": "flight", "329": "flight", "330": "flight", "331": "flight", "332": "flight", "333": "flight", "334": "flight", "335": "flight", "336": "flight", "337": "flight", "338": "flight", "339": "flight", "340": "flight", "341": "flight", "342": "flight", "343": "flight", "344": "flight", "345": "flight", "346": "flight", "347": "flight", "348": "flight", "349": "flight", "350": "flight", "351": "flight", "352": "flight", "353": "flight", "354": "flight", "355": "flight", "356": "flight", "357": "flight", "358": "flight", "359": "flight", "360": "flight", "361": "flight", "362": "flight", "363": "flight", "364": "flight", "365": "flight", "366": "flight", "367": "flight", "368": "flight", "369": "flight", "370": "flight", "371": "flight", "372": "flight", "373": "flight", "374": "flight", "375": "flight", "376": "flight", "377": "flight", "378": "flight", "379": "flight", "380": "flight", "381": "flight", "382": "flight", "383": "flight", "384": "flight", "385": "flight", "386": "flight", "387": "flight", "388": "flight", "389": "flight", "390": "flight", "391": "flight", "392": "flight", "393": "flight", "394": "flight", "395": "flight", "396": "flight", "397": "flight", "398": "flight", "399": "regulation", "400": "regulation", "401": "regulation", "402": "regulation", "403": "regulation", "404": "regulation", "405": "regulation", "406": "regulation", "407": "regulation", "408": "regulation", "409": "regulation", "410": "regulation", "411": "regulation", "412": "regulation", "413": "regulation", "414": "regulation", "415": "regulation", "416": "regulation", "417": "regulation", "418": "regulation", "419": "regulation", "420": "regulation", "421": "regulation", "422": "regulation", "423": "regulation", "424": "regulation", "425": "regulation", "426": "regulation", "427": "regulation", "428": "regulation", "429": "regulation", "430": "regulation", "431": "regulation", "432": "regulation", "433": "regulation", "434": "regulation", "435": "regulation", "436": "regulation", "437": "regulation", "438": "regulation", "439": "regulation", "440": "regulation", "441": "regulation", "442": "regulation", "443": "regulation", "444": "regulation", "445": "regulation", "446": "regulation", "447": "regulation", "448": "regulation", "449": "regulation", "450": "regulation", "451": "regulation", "452": "regulation", "453": "regulation", "454": "regulation", "455": "regulation", "456": "regulation", "457": "regulation", "458": "regulation", "459": "regulation", "460": "regulation", "461": "regulation", "462": "regulation", "463": "regulation", "464": "regulation", "465": "regulation", "466": "regulation", "467": "regulation", "468": "regulation", "469": "regulation", "470": "regulation", "471": "regulation", "472": "regulation", "473": "regulation", "474": "regulation", "475": "regulation", "476": "regulation", "477": "regulation", "478": "regulation", "479": "regulation", "480": "regulation", "481": "regulation", "482": "regulation", "483": "regulation", "484": "regulation", "485": "regulation", "486": "regulation", "487": "regulation", "488": "regulation", "489": "regulation", "490": "regulation", "491": "regulation", "492": "regulation", "493": "regulation", "494": "regulation", "495": "regulation", "496": "regulation", "497": "regulation", "498": "regulation", "499": "regulation", "500": "regulation", "501": "regulation", "502": "regulation", "503": "regulation", "504": "regulation", "505": "regulation", "506": "regulation", "507": "regulation", "508": "regulation", "509": "regulation", "510": "regulation", "511": "regulation", "512": "regulation", "513": "regulation", "514": "regulation", "515": "regulation", "516": "regulation", "517": "regulation", "518": "regulation", "519": "regulation", "520": "regulation", "521": "weather", "522": "weather", "523": "weather", "524": "weather", "525": "weather", "526": "weather", "527": "weather", "528": "weather", "529": "weather", "530": "weather", "531": "weather", "532": "weather", "533": "weather", "534": "weather", "535": "weather", "536": "weather", "537": "weather", "538": "weather", "539": "weather", "540": "weather", "541": "weather", "542": "weather", "543": "weather", "544": "weather", "545": "weather", "546": "weather", "547": "weather", "548": "weather", "549": "weather", "550": "weather", "551": "weather", "552": "weather", "553": "weather", "554": "weather", "555": "weather", "556": "weather", "557": "weather", "558": "weather", "559": "weather", "560": "weather", "561": "weather", "562": "weather", "563": "weather", "564": "weather", "565": "weather", "566": "weather", "567": "weather", "568": "weather", "569": "weather", "570": "weather", "571": "weather", "572": "weather", "573": "weather", "574": "weather", "575": "weather", "576": "weather", "577": "weather", "578": "weather", "579": "weather", "580": "weather", "581": "weather", "582": "weather", "583": "weather", "584": "weather", "585": "weather", "586": "weather", "587": "weather", "588": "weather", "589": "weather", "590": "weather", "591": "weather", "592": "weather", "593": "weather", "594": "weather", "595": "weather", "596": "weather", "597": "weather", "598": "weather", "599": "weather", "600": "weather", "601": "weather", "602": "weather", "603": "weather", "604": "weather", "605": "weather", "606": "weather", "607": "weather", "608": "weather", "609": "weather", "610": "weather", "611": "weather", "612": "weather", "613": "weather", "614": "weather", "615": "weather", "616": "weather", "617": "weather", "618": "weather", "619": "weather", "620": "weather", "621": "weather", "622": "weather", "623": "weather", "624": "weather", "625": "weather", "626": "weather", "627": "weather", "628": "weather", "629": "weather", "630": "weather", "631": "weather", "632": "weather", "633": "weather", "634": "weather", "635": "weather", "636": "weather", "637": "weather", "638": "weather", "639": "weather", "640": "weather", "641": "weather", "642": "weather", "643": "weather", "644": "weather", "645": "weather", "646": "weather", "647": "weather", "648": "weather", "649": "weather", "650": "weather", "651": "weather", "652": "weather", "653": "weather", "654": "weather", "655": "weather", "656": "weather", "657": "weather", "658": "weather", "659": "weather", "660": "weather", "661": "weather", "662": "weather", "663": "weather", "664": "weather", "665": "weather", "666": "weather", "667": "weather", "668": "weather", "669": "weather", "670": "weather", "671": "weather", "672": "weather", "673": "weather", "674": "weather", "675": "weather", "676": "weather", "677": "weather", "678": "weather", "679": "weather", "680": "weather", "681": "weather", "682": "weather", "683": "weather", "684": "weather", "685": "weather", "686": "weather", "687": "takeoff", "688": "takeoff", "689": "takeoff", "690": "takeoff", "691": "takeoff", "692": "takeoff", "693": "takeoff", "694": "takeoff", "695": "takeoff", "696": "takeoff", "697": "takeoff", "698": "takeoff", "699": "takeoff", "700": "takeoff", "701": "takeoff", "702": "takeoff", "703": "takeoff", "704": "takeoff", "705": "takeoff", "706": "takeoff", "707": "takeoff", "708": "takeoff", "709": "takeoff", "710": "takeoff", "711": "takeoff", "712": "takeoff", "713": "takeoff", "714": "takeoff", "715": "takeoff", "716": "takeoff", "717": "takeoff", "718": "takeoff", "719": "takeoff", "720": "takeoff", "721": "takeoff", "722": "takeoff", "723": "takeoff", "724": "takeoff", "725": "takeoff", "726": "takeoff", "727": "takeoff", "728": "takeoff", "729": "takeoff", "730": "takeoff", "731": "takeoff", "732": "takeoff", "733": "takeoff", "734": "takeoff", "735": "takeoff", "736": "takeoff", "737": "takeoff", "738": "takeoff", "739": "takeoff", "740": "takeoff", "741": "takeoff", "742": "takeoff", "743": "takeoff", "744": "takeoff", "745": "takeoff", "746": "takeoff", "747": "takeoff", "748": "takeoff", "749": "takeoff", "750": "takeoff", "751": "takeoff", "752": "takeoff", "753": "takeoff", "754": "takeoff", "755": "takeoff", "756": "takeoff", "757": "takeoff", "758": "takeoff", "759": "takeoff", "760": "takeoff", "761": "takeoff", "762": "takeoff", "763": "takeoff", "764": "takeoff", "765": "takeoff", "766": "takeoff", "767": "takeoff", "768": "takeoff", "769": "takeoff", "770": "takeoff", "771": "takeoff", "772": "takeoff", "773": "takeoff", "774": "takeoff", "775": "takeoff", "776": "takeoff", "777": "takeoff", "778": "takeoff", "779": "takeoff", "780": "takeoff", "781": "takeoff", "782": "takeoff", "783": "takeoff", "784": "takeoff", "785": "takeoff", "786": "takeoff", "787": "takeoff", "788": "takeoff", "789": "takeoff", "790": "takeoff", "791": "takeoff", "792": "takeoff", "793": "takeoff", "794": "takeoff", "795": "takeoff", "796": "takeoff", "797": "takeoff", "798": "takeoff", "799": "takeoff", "800": "takeoff", "801": "takeoff", "802": "takeoff", "803": "takeoff", "804": "takeoff", "805": "takeoff", "806": "takeoff", "807": "takeoff", "808": "takeoff", "809": "takeoff", "810": "takeoff", "811": "takeoff", "812": "takeoff", "813": "takeoff", "814": "takeoff", "815": "takeoff", "816": "takeoff", "817": "takeoff", "818": "takeoff", "819": "takeoff", "820": "takeoff", "821": "takeoff", "822": "takeoff", "823": "takeoff", "824": "takeoff", "825": "takeoff", "826": "takeoff", "827": "takeoff", "828": "takeoff", "829": "takeoff", "830": "takeoff", "831": "takeoff", "832": "takeoff", "833": "takeoff", "834": "takeoff", "835": "takeoff", "836": "structure", "837": "structure", "838": "structure", "839": "structure", "840": "structure", "841": "structure", "842": "structure", "843": "structure", "844": "structure", "845": "structure", "846": "structure", "847": "structure", "848": "structure", "849": "structure", "850": "structure", "851": "structure", "852": "structure", "853": "structure", "854": "structure", "855": "structure", "856": "structure", "857": "structure", "858": "structure", "859": "structure", "860": "structure", "861": "structure", "862": "structure", "863": "structure", "864": "structure", "865": "structure", "866": "structure", "867": "structure", "868": "structure", "869": "structure", "870": "structure", "871": "structure", "872": "structure", "873": "structure", "874": "structure", "875": "structure", "876": "structure", "877": "structure", "878": "structure", "879": "structure", "880": "structure", "881": "structure", "882": "structure", "883": "structure", "884": "structure", "885": "structure", "886": "structure", "887": "structure", "888": "structure", "889": "structure", "890": "structure", "891": "structure", "892": "structure", "893": "structure", "894": "structure", "895": "structure", "896": "structure", "897": "structure", "898": "structure", "899": "structure", "900": "structure", "901": "structure", "902": "structure", "903": "structure", "904": "structure", "905": "structure", "906": "structure", "907": "structure", "908": "structure", "909": "structure", "910": "structure", "911": "structure", "912": "structure", "913": "structure", "914": "structure", "915": "structure", "916": "structure", "917": "structure", "918": "structure", "919": "structure", "920": "structure", "921": "structure", "922": "structure", "923": "structure", "924": "structure", "925": "structure", "926": "structure", "927": "structure", "928": "structure", "929": "structure", "930": "structure", "931": "structure", "932": "structure", "933": "structure", "934": "structure", "935": "structure", "936": "structure", "937": "structure", "938": "structure", "939": "structure", "940": "structure", "941": "structure", "942": "structure", "943": "structure", "944": "structure", "945": "structure", "946": "structure", "947": "structure", "948": "structure", "949": "structure", "950": "structure", "951": "structure", "952": "structure", "953": "structure", "954": "structure", "955": "structure", "956": "structure", "957": "structure", "958": "structure", "959": "structure", "960": "structure", "961": "structure", "962": "structure", "963": "structure", "964": "structure", "965": "structure", "966": "structure", "967": "structure", "968": "structure", "969": "structure", "970": "structure", "971": "structure", "972": "structure", "973": "structure", "974": "structure", "975": "structure", "976": "structure", "977": "structure", "978": "structure", "979": "structure", "980": "structure", "981": "structure", "982": "structure", "983": "structure", "984": "structure", "985": "structure", "986": "structure", "987": "structure", "988": "structure", "989": "structure", "990": "structure", "991": "structure", "992": "structure", "993": "structure", "994": "structure", "995": "structure", "996": "structure", "997": "structure", "998": "structure", "999": "structure", "1000": "structure", "1001": "structure", "1002": "structure", "1003": "structure", "1004": "structure", "1005": "structure", "1006": "structure", "1007": "structure", "1008": "structure", "1009": "structure", "1010": "structure", "1011": "structure", "1012": "structure", "1013": "structure", "1014": "structure", "1015": "structure", "1016": "structure", "1017": "structure", "1018": "structure", "1019": "structure", "1020": "structure", "1021": "structure", "1022": "structure", "1023": "structure", "1024": "structure", "1025": "structure", "1026": "structure", "1027": "structure", "1028": "structure", "1029": "structure", "1030": "structure", "1031": "structure", "1032": "structure", "1033": "structure", "1034": "structure", "1035": "structure", "1036": "structure", "1037": "structure", "1038": "structure", "1039": "structure", "1040": "structure", "1041": "structure", "1042": "structure", "1043": "structure", "1044": "structure", "1045": "structure", "1046": "structure", "1047": "structure", "1048": "structure", "1049": "structure", "1050": "structure", "1051": "structure", "1052": "structure", "1053": "structure", "1054": "structure", "1055": "regulation", "1056": "regulation", "1057": "regulation", "1058": "regulation", "1059": "regulation", "1060": "regulation", "1061": "regulation", "1062": "regulation", "1063": "regulation", "1064": "regulation", "1065": "regulation", "1066": "regulation", "1067": "regulation", "1068": "regulation", "1069": "regulation", "1070": "regulation", "1071": "regulation", "1072": "regulation", "1073": "regulation", "1074": "regulation", "1075": "regulation", "1076": "regulation", "1077": "regulation", "1078": "regulation", "1079": "regulation", "1080": "regulation", "1081": "regulation", "1082": "regulation", "1083": "regulation", "1084": "regulation", "1085": "regulation", "1086": "regulation", "1087": "regulation", "1088": "regulation", "1089": "regulation", "1090": "regulation", "1091": "regulation", "1092": "regulation", "1093": "regulation", "1094": "regulation", "1095": "regulation", "1096": "regulation", "1097": "regulation", "1098": "regulation", "1099": "regulation", "1100": "regulation", "1101": "regulation", "1102": "regulation", "1103": "remote", "1104": "remote", "1105": "remote", "1106": "remote", "1107": "remote", "1108": "remote", "1109": "remote", "1110": "remote", "1111": "remote", "1112": "remote", "1113": "remote", "1114": "remote", "1115": "remote", "1116": "remote", "1117": "remote", "1118": "remote", "1119": "remote", "1120": "remote", "1121": "remote", "1122": "remote", "1123": "remote", "1124": "remote", "1125": "remote", "1126": "remote", "1127": "remote", "1128": "remote", "1129": "remote"};
+
+﻿// ====== AI ANIMATION ENGINE ======
+var _animState = { running:false, rafId:null, canvas:null, ctx:null, type:"flight", time:0 };
+
+function getAnimType(qId) {
+  return Q_ANIM_MAP[qId] || "flight";
+}
+function getAnimTitle(type) {
+  var t = { flight:"飞行原理演示", structure:"无人机结构示意", weather:"气象原理图解",
+    takeoff:"起降技术示意", regulation:"空域法规示意", remote:"遥控器原理示意" };
+  return t[type] || "原理动画";
+}
+function showAnimModal(qId) {
+  var type = getAnimType(qId);
+  var title = getAnimTitle(type);
+  var old = document.querySelector(".anim-modal");
+  if(old) old.remove();
+  stopAnim();
+  var modal = document.createElement("div");
+  modal.className = "anim-modal open";
+  modal.innerHTML = '<div class="anim-modal-box">' +
+    '<div class="anim-modal-header"><h3>\uD83D\uDCD0 ' + title + '</h3>' +
+    '<button class="anim-modal-close" onclick="closeAnimModal()">&times;</button></div>' +
+    '<div class="anim-canvas-wrap"><canvas id="animCanvas"></canvas><div class="anim-legend" id="animLegend"></div></div>' +
+    '<div class="anim-controls">' +
+    '<button onclick="toggleAnim()" id="animPlayBtn">\u23F8 \u6682\u505C</button>' +
+    '<button onclick="resetAnim()">\uD83D\uDD04 \u91CD\u7F6E</button>' +
+    '<button onclick="closeAnimModal()">\u2716 \u5173\u95ED</button></div></div>';
+  document.body.appendChild(modal);
+  modal.addEventListener("click", function(e) {
+    if(e.target === modal) closeAnimModal();
+  });
+  var canvas = document.getElementById("animCanvas");
+  if(!canvas) return;
+  var ctx = canvas.getContext("2d");
+  _animState.canvas = canvas; _animState.ctx = ctx;
+  _animState.running = true; _animState.type = type; _animState.time = 0;
+  var wrap = canvas.parentElement;
+  canvas.width = wrap.clientWidth; canvas.height = wrap.clientHeight;
+  var legend = document.getElementById("animLegend");
+  updateLegend(type, legend);
+  startAnim(type, ctx, canvas);
+}
+function closeAnimModal() { stopAnim(); var m = document.querySelector(".anim-modal"); if(m) m.remove(); }
+function stopAnim() { _animState.running = false; if(_animState.rafId) { cancelAnimationFrame(_animState.rafId); _animState.rafId = null; } }
+function toggleAnim() {
+  var btn = document.getElementById("animPlayBtn");
+  if(!btn) return;
+  if(_animState.running) { _animState.running = false; if(_animState.rafId) { cancelAnimationFrame(_animState.rafId); _animState.rafId = null; } btn.textContent = "\u25B6 \u64AD\u653E"; }
+  else { _animState.running = true; btn.textContent = "\u23F8 \u6682\u505C"; startAnim(_animState.type, _animState.ctx, _animState.canvas); }
+}
+function resetAnim() {
+  var btn = document.getElementById("animPlayBtn");
+  if(btn) btn.textContent = "\u23F8 \u6682\u505C";
+  _animState.time = 0; _animState.running = true;
+  startAnim(_animState.type, _animState.ctx, _animState.canvas);
+}
+function startAnim(type, ctx, canvas) {
+  _animState.type = type; _animState.ctx = ctx; _animState.canvas = canvas;
+  if(type === "flight") runFlightAnim();
+  else if(type === "structure") runStructureAnim();
+  else if(type === "weather") runWeatherAnim();
+  else if(type === "takeoff") runTakeoffAnim();
+  else if(type === "regulation") runRegulationAnim();
+  else if(type === "remote") runRemoteAnim();
+}
+function updateLegend(type, el) {
+  if(!el) return;
+  var legends = {
+    flight:'<span><span class="dot" style="background:#f5a623;"></span> Lift</span><span><span class="dot" style="background:#ef4444;"></span> Gravity</span><span><span class="dot" style="background:#3b82f6;"></span> Airflow</span>',
+    structure:'<span><span class="dot" style="background:#f5a623;"></span> Frame</span><span><span class="dot" style="background:#3b82f6;"></span> ESC</span><span><span class="dot" style="background:#22c55e;"></span> Motor</span><span><span class="dot" style="background:#ef4444;"></span> Prop</span>',
+    weather:'<span><span class="dot" style="background:#3b82f6;"></span> High</span><span><span class="dot" style="background:#ef4444;"></span> Low</span><span><span class="dot" style="background:#f5a623;"></span> Wind</span>',
+    takeoff:'<span><span class="dot" style="background:#22c55e;"></span> Takeoff</span><span><span class="dot" style="background:#ef4444;"></span> Landing</span><span><span class="dot" style="background:#f5a623;"></span> Control</span>',
+    regulation:'<span><span class="dot" style="background:#22c55e;"></span> Fly Zone</span><span><span class="dot" style="background:#ef4444;"></span> No-Fly</span><span><span class="dot" style="background:#f5a623;"></span> Route</span>',
+    remote:'<span><span class="dot" style="background:#f5a623;"></span> Signal</span><span><span class="dot" style="background:#3b82f6;"></span> Channel</span><span><span class="dot" style="background:#22c55e;"></span> Command</span>'
+  };
+  el.innerHTML = legends[type] || legends.flight;
+}
+
+// ====== 1. FLIGHT PRINCIPLE ======
+function runFlightAnim() {
+  var canvas = _animState.canvas, ctx = _animState.ctx;
+  if(!canvas || !ctx) return;
+  var W = canvas.width, H = canvas.height, cx = W/2, cy = H/2;
+  function draw() {
+    if(!_animState.running) return;
+    _animState.rafId = requestAnimationFrame(draw);
+    _animState.time += 0.02; var s = _animState.time;
+    ctx.clearRect(0, 0, W, H);
+    var bg = ctx.createLinearGradient(0, 0, 0, H);
+    bg.addColorStop(0, "#0a1628"); bg.addColorStop(0.5, "#0d2137"); bg.addColorStop(1, "#1a3a5c");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.translate(cx, cy);
+    ctx.strokeStyle = "rgba(59,130,246,0.25)"; ctx.lineWidth = 1.5;
+    for(var i = -3; i <= 3; i++) {
+      var yy = i * 25 + Math.sin(s + i * 0.5) * 8;
+      ctx.beginPath(); ctx.moveTo(-W/2 + 20, yy);
+      for(var x = -W/2 + 20; x < W/2 - 20; x += 4) ctx.lineTo(x, yy + Math.sin((x + W/2) * 0.02 + s * 2 + i) * 3);
+      ctx.stroke();
+    }
+    ctx.beginPath(); ctx.moveTo(-80, 0); ctx.quadraticCurveTo(-40, -50, 20, -30); ctx.quadraticCurveTo(60, -15, 80, 5); ctx.quadraticCurveTo(60, 15, 20, 10); ctx.quadraticCurveTo(-40, 5, -80, 0); ctx.closePath();
+    var wg = ctx.createLinearGradient(0, -50, 0, 20);
+    wg.addColorStop(0, "rgba(59,130,246,0.6)"); wg.addColorStop(0.5, "rgba(59,130,246,0.3)"); wg.addColorStop(1, "rgba(59,130,246,0.5)");
+    ctx.fillStyle = wg; ctx.fill(); ctx.strokeStyle = "#60a5fa"; ctx.lineWidth = 2; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, 20); ctx.lineTo(0, -80 - Math.sin(s * 3) * 10);
+    ctx.strokeStyle = "#f5a623"; ctx.lineWidth = 3; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, -80 - Math.sin(s * 3) * 10); ctx.lineTo(-8, -70 - Math.sin(s * 3) * 10); ctx.lineTo(8, -70 - Math.sin(s * 3) * 10); ctx.closePath();
+    ctx.fillStyle = "#f5a623"; ctx.fill();
+    ctx.fillStyle = "#f5a623"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center"; ctx.fillText("LIFT", 0, -90 - Math.sin(s * 3) * 10);
+    ctx.beginPath(); ctx.moveTo(0, -10); ctx.lineTo(0, 60);
+    ctx.strokeStyle = "#ef4444"; ctx.lineWidth = 3; ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, 60); ctx.lineTo(-8, 50); ctx.lineTo(8, 50); ctx.closePath();
+    ctx.fillStyle = "#ef4444"; ctx.fill();
+    ctx.fillStyle = "#ef4444"; ctx.font = "bold 12px sans-serif"; ctx.textAlign = "center"; ctx.fillText("GRAVITY", 0, 75);
+    ctx.restore();
+    ctx.fillStyle = "rgba(255,255,255,0.6)"; ctx.font = "13px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("Airfoil Lift Principle - Wing generates lift in airflow", cx, H - 15);
+  }
+  _animState.rafId = requestAnimationFrame(draw);
+}
+
+// ====== 2. STRUCTURE (Quadcopter) ======
+function runStructureAnim() {
+  var canvas = _animState.canvas, ctx = _animState.ctx;
+  if(!canvas || !ctx) return;
+  var W = canvas.width, H = canvas.height, cx = W/2, cy = H/2;
+  function draw() {
+    if(!_animState.running) return;
+    _animState.rafId = requestAnimationFrame(draw);
+    _animState.time += 0.02; var s = _animState.time;
+    ctx.clearRect(0, 0, W, H);
+    var bg = ctx.createRadialGradient(cx, cy, 0, cx, cy, W/2);
+    bg.addColorStop(0, "#0d2137"); bg.addColorStop(1, "#060e17");
+    ctx.fillStyle = bg; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.translate(cx, cy); var rot = Math.sin(s * 0.5) * 0.05;
+    ctx.strokeStyle = "rgba(148,163,184,0.6)"; ctx.lineWidth = 4;
+    for(var i = 0; i < 4; i++) { var a = rot + i * Math.PI/2 + Math.PI/4; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(Math.cos(a)*100, Math.sin(a)*100); ctx.stroke(); }
+    ctx.beginPath(); ctx.arc(0, 0, 20, 0, Math.PI*2); ctx.fillStyle = "#3b82f6"; ctx.fill(); ctx.strokeStyle = "#60a5fa"; ctx.lineWidth = 2; ctx.stroke();
+    ctx.fillStyle = "#fff"; ctx.font = "bold 10px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("FC", 0, 0);
+    for(var i = 0; i < 4; i++) {
+      var angle = rot + i * Math.PI/2 + Math.PI/4, mx = Math.cos(angle)*100, my = Math.sin(angle)*100;
+      ctx.beginPath(); ctx.arc(mx, my, 10, 0, Math.PI*2); ctx.fillStyle = "#22c55e"; ctx.fill(); ctx.strokeStyle = "#4ade80"; ctx.lineWidth = 1.5; ctx.stroke();
+      ctx.beginPath(); ctx.arc(mx, my, 28, 0, Math.PI*1.5 + s*3 + i); ctx.strokeStyle = "rgba(245,166,35,0.5)"; ctx.lineWidth = 3; ctx.stroke();
+      ctx.beginPath(); ctx.arc(mx, my, 28, Math.PI*0.3 + s*3 + i, Math.PI*0.7 + s*3 + i); ctx.strokeStyle = "rgba(245,166,35,0.3)"; ctx.lineWidth = 2; ctx.stroke();
+      ctx.fillStyle = "rgba(255,255,255,0.5)"; ctx.font = "9px sans-serif"; ctx.textAlign = "center"; ctx.fillText("M"+(i+1), mx, my+24);
+    }
+    ctx.restore();
+    ctx.fillStyle = "rgba(255,255,255,0.6)"; ctx.font = "13px sans-serif"; ctx.textAlign = "center";
+    ctx.fillText("Quadcopter: FC + 4x ESC + 4x Motor + Propeller", cx, H-15);
+  }
+  _animState.rafId = requestAnimationFrame(draw);
+}
+
+// ====== 3. WEATHER ======
+function runWeatherAnim() {
+  var canvas = _animState.canvas, ctx = _animState.ctx;
+  if(!canvas || !ctx) return;
+  var W = canvas.width, H = canvas.height, cx = W/2, cy = H/2;
+  function draw() {
+    if(!_animState.running) return;
+    _animState.rafId = requestAnimationFrame(draw);
+    _animState.time += 0.02; var s = _animState.time;
+    ctx.clearRect(0, 0, W, H);
+    var bg = ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,"#1e3a5f");bg.addColorStop(0.4,"#4a7db5");bg.addColorStop(0.7,"#8db8d9");bg.addColorStop(1,"#c8dce8");
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="#2d5a27";ctx.fillRect(0,H*0.75,W,H*0.25);
+    ctx.save();ctx.translate(cx-100,cy-20);
+    ctx.fillStyle="rgba(239,68,68,0.15)";ctx.beginPath();ctx.arc(0,0,60,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#ef4444";ctx.font="bold 14px sans-serif";ctx.textAlign="center";ctx.fillText("L",0,5);
+    for(var i=0;i<5;i++){var ay=(s*40+i*30)%80-40;ctx.beginPath();ctx.moveTo(-10+i*5,ay);ctx.lineTo(-10+i*5,ay-20);ctx.strokeStyle="rgba(239,68,68,0.4)";ctx.lineWidth=2;ctx.stroke();}
+    ctx.restore();
+    ctx.save();ctx.translate(cx+100,cy+20);
+    ctx.fillStyle="rgba(59,130,246,0.15)";ctx.beginPath();ctx.arc(0,0,60,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#3b82f6";ctx.font="bold 14px sans-serif";ctx.textAlign="center";ctx.fillText("H",0,5);
+    for(var i=0;i<5;i++){var ay=-(s*40+i*30)%80+40;ctx.beginPath();ctx.moveTo(-10+i*5,ay);ctx.lineTo(-10+i*5,ay+20);ctx.strokeStyle="rgba(59,130,246,0.4)";ctx.lineWidth=2;ctx.stroke();}
+    ctx.restore();
+    for(var i=0;i<3;i++){var cx2=(s*20+i*200)%(W+100)-50;ctx.fillStyle="rgba(255,255,255,0.3)";ctx.beginPath();ctx.ellipse(cx2,40,50,15,0,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.ellipse(cx2+15,32,35,18,0,0,Math.PI*2);ctx.fill();}
+    ctx.fillStyle="rgba(0,0,0,0.6)";ctx.font="12px sans-serif";ctx.textAlign="center";
+    ctx.fillText("Air moves from High(H) to Low(L) pressure areas",cx,H-15);
+  }
+  _animState.rafId=requestAnimationFrame(draw);
+}
+
+// ====== 4. TAKEOFF ======
+function runTakeoffAnim() {
+  var canvas=_animState.canvas,ctx=_animState.ctx;
+  if(!canvas||!ctx)return;
+  var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2;
+  function draw(){
+    if(!_animState.running)return;
+    _animState.rafId=requestAnimationFrame(draw);
+    _animState.time+=0.02;var s=_animState.time;
+    ctx.clearRect(0,0,W,H);
+    var bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,"#0a1628");bg.addColorStop(0.6,"#1a3a5c");bg.addColorStop(1,"#2d5a3a");
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    ctx.fillStyle="#1a3a1a";ctx.fillRect(0,H*0.8,W,H*0.2);
+    var prog=(s*0.3)%1,droneX=cx,droneY=H*0.75-120;
+    if(prog<0.5){var t=prog*2;droneX=cx-60+t*100;droneY=H*0.75-20-t*100;}
+    else{var t=(prog-0.5)*2;droneX=cx+40+t*80;droneY=H*0.75-120+t*20;}
+    ctx.strokeStyle="rgba(34,197,94,0.3)";ctx.lineWidth=2;ctx.setLineDash([4,4]);
+    ctx.beginPath();ctx.moveTo(cx-20,H*0.78);ctx.quadraticCurveTo(cx-40,H*0.75-120,cx+40,H*0.75-120);ctx.quadraticCurveTo(cx+100,H*0.75-120,cx+120,H*0.75-100);
+    ctx.stroke();ctx.setLineDash([]);
+    ctx.save();ctx.translate(droneX,droneY);
+    ctx.fillStyle="#3b82f6";ctx.fillRect(-8,-4,16,8);
+    ctx.strokeStyle="#94a3b8";ctx.lineWidth=1.5;ctx.beginPath();ctx.moveTo(-8,0);ctx.lineTo(-20,0);ctx.moveTo(8,0);ctx.lineTo(20,0);ctx.stroke();
+    ctx.strokeStyle="rgba(245,166,35,0.5)";ctx.lineWidth=2;ctx.beginPath();ctx.arc(-20,0,10,0,Math.PI*1.5+s*5);ctx.stroke();
+    ctx.beginPath();ctx.arc(20,0,10,Math.PI*0.5+s*5,Math.PI*2+s*5);ctx.stroke();
+    ctx.restore();
+    ctx.fillStyle="rgba(255,255,255,0.5)";ctx.font="12px sans-serif";ctx.textAlign="center";
+    ctx.fillText("Takeoff/Landing Path",cx,H-40);
+    ctx.fillStyle="rgba(255,255,255,0.1)";ctx.fillRect(10,H-30,W-20,6);
+    ctx.fillStyle="#22c55e";ctx.fillRect(10,H-30,(W-20)*prog,6);
+  }
+  _animState.rafId=requestAnimationFrame(draw);
+}
+
+// ====== 5. REGULATION ======
+function runRegulationAnim() {
+  var canvas=_animState.canvas,ctx=_animState.ctx;
+  if(!canvas||!ctx)return;
+  var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2;
+  function draw(){
+    if(!_animState.running)return;
+    _animState.rafId=requestAnimationFrame(draw);
+    _animState.time+=0.02;var s=_animState.time;
+    ctx.clearRect(0,0,W,H);
+    var bg=ctx.createRadialGradient(cx,cy,0,cx,cy,W/2);
+    bg.addColorStop(0,"#1a2a3a");bg.addColorStop(1,"#0a1520");
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    ctx.strokeStyle="rgba(255,255,255,0.05)";ctx.lineWidth=0.5;
+    for(var i=0;i<W;i+=40){ctx.beginPath();ctx.moveTo(i,0);ctx.lineTo(i,H);ctx.stroke();}
+    for(var i=0;i<H;i+=40){ctx.beginPath();ctx.moveTo(0,i);ctx.lineTo(W,i);ctx.stroke();}
+    var pr=55+Math.sin(s*2)*5;
+    ctx.beginPath();ctx.arc(cx+60,cy,pr,0,Math.PI*2);ctx.fillStyle="rgba(239,68,68,0.15)";ctx.fill();
+    ctx.strokeStyle="rgba(239,68,68,0.6)";ctx.lineWidth=2;ctx.setLineDash([4,4]);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle="#ef4444";ctx.font="bold 11px sans-serif";ctx.textAlign="center";ctx.fillText("NO-FLY",cx+60,cy+4);
+    ctx.beginPath();ctx.arc(cx-80,cy+20,50,0,Math.PI*2);ctx.fillStyle="rgba(34,197,94,0.1)";ctx.fill();
+    ctx.strokeStyle="rgba(34,197,94,0.5)";ctx.lineWidth=1.5;ctx.stroke();
+    ctx.fillStyle="#22c55e";ctx.font="bold 11px sans-serif";ctx.textAlign="center";ctx.fillText("FLY ZONE",cx-80,cy+24);
+    ctx.beginPath();ctx.arc(cx-20,cy-40,40,0,Math.PI*2);ctx.fillStyle="rgba(245,166,35,0.08)";ctx.fill();
+    ctx.strokeStyle="rgba(245,166,35,0.4)";ctx.lineWidth=1.5;ctx.setLineDash([3,3]);ctx.stroke();ctx.setLineDash([]);
+    ctx.fillStyle="#f5a623";ctx.font="10px sans-serif";ctx.textAlign="center";ctx.fillText("RESTRICTED",cx-20,cy-36);
+    var px=(s*30)%W,py=cy+60+Math.sin(s*2)*20;
+    ctx.fillStyle="#f5a623";ctx.beginPath();ctx.arc(px,py,4,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="rgba(255,255,255,0.5)";ctx.font="12px sans-serif";ctx.textAlign="center";
+    ctx.fillText("Airspace Classification & Route Planning",cx,H-15);
+  }
+  _animState.rafId=requestAnimationFrame(draw);
+}
+
+// ====== 6. REMOTE CONTROL ======
+function runRemoteAnim() {
+  var canvas=_animState.canvas,ctx=_animState.ctx;
+  if(!canvas||!ctx)return;
+  var W=canvas.width,H=canvas.height,cx=W/2,cy=H/2;
+  function draw(){
+    if(!_animState.running)return;
+    _animState.rafId=requestAnimationFrame(draw);
+    _animState.time+=0.02;var s=_animState.time;
+    ctx.clearRect(0,0,W,H);
+    var bg=ctx.createLinearGradient(0,0,0,H);
+    bg.addColorStop(0,"#0a1628");bg.addColorStop(1,"#1a2a3a");
+    ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+    ctx.save();ctx.translate(cx,cy-20);
+    ctx.fillStyle="#1e293b";ctx.strokeStyle="#475569";ctx.lineWidth=2;
+    ctx.beginPath();ctx.roundRect(-50,-60,100,130,12);ctx.fill();ctx.stroke();
+    ctx.fillStyle="#0f172a";ctx.beginPath();ctx.roundRect(-30,-50,60,25,4);ctx.fill();
+    ctx.strokeStyle="#334155";ctx.lineWidth=1;ctx.stroke();
+    ctx.fillStyle="#22c55e";ctx.font="8px monospace";ctx.textAlign="center";ctx.fillText("FLYING",0,-33);
+    ctx.save();ctx.translate(-25,10);
+    var lx=Math.sin(s*1.3)*8,ly=Math.cos(s*1.7)*8;
+    ctx.fillStyle="#334155";ctx.beginPath();ctx.arc(0,0,14,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#475569";ctx.beginPath();ctx.arc(lx,ly,9,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#60a5fa";ctx.beginPath();ctx.arc(lx,ly,4,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+    ctx.save();ctx.translate(25,10);
+    var rx=Math.cos(s*1.1)*8,ry=Math.sin(s*0.9)*8;
+    ctx.fillStyle="#334155";ctx.beginPath();ctx.arc(0,0,14,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#475569";ctx.beginPath();ctx.arc(rx,ry,9,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle="#f5a623";ctx.beginPath();ctx.arc(rx,ry,4,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+    ctx.fillStyle="rgba(255,255,255,0.4)";ctx.font="9px sans-serif";ctx.textAlign="center";
+    ctx.fillText("ESC 1",-25,38);ctx.fillText("ESC 2",25,38);
+    for(var i=0;i<3;i++){var sw=20+i*10+Math.sin(s*3+i)*3;ctx.beginPath();ctx.arc(0,70,sw,-0.3,0.3);ctx.strokeStyle="rgba(59,130,246,"+(0.3-i*0.08)+")";ctx.lineWidth=1.5;ctx.stroke();}
+    ctx.restore();
+    ctx.fillStyle="rgba(255,255,255,0.4)";ctx.font="10px sans-serif";ctx.textAlign="left";
+    ctx.fillText("CH1: ELE",15,20);ctx.fillText("CH2: AIL",15,35);
+    ctx.fillText("CH3: THR",15,50);ctx.fillText("CH4: RUD",15,65);
+    ctx.fillStyle="rgba(255,255,255,0.5)";ctx.font="12px sans-serif";ctx.textAlign="center";
+    ctx.fillText("RC Channel Mapping - ELE/AIL/THR/RUD",cx,H-15);
+  }
+  _animState.rafId=requestAnimationFrame(draw);
 }
 
 (function() {
