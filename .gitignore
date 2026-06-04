@@ -1,0 +1,3 @@
+﻿node_modules/
+.qdata.js
+playwright_test.js
