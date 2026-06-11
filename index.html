@@ -432,7 +432,8 @@ function setNav() {
       {ic:"&#x1F3E0;", lb:"首页", id:"home", fn:"goHome()"},
       {ic:"&#x1F4DA;", lb:"章节练习", id:"home", fn:"goHome()"},
       {ic:"&#x1F4DD;", lb:"模拟考试", id:"exam", fn:"startExam()"},
-      {ic:"&#x274C;", lb:"错题本", id:"wb", fn:"renderWB()"}
+      {ic:"&#x274C;", lb:"错题本", id:"wb", fn:"renderWB()"},
+      {ic:"&#x1F504;", lb:"错题训练", id:"wp", fn:"startWP()"}
     ];
   }
   var h = "";
@@ -724,7 +725,7 @@ function startExam() {
   var shuffled = shuf(ALL_QUESTIONS);
   _examState.questions = shuffled.slice(0, count);
   _examState.answers = {};
-  _examState.timeLeft = 45 * 60;
+  _examState.timeLeft = 120 * 60;
   _examState.running = true;
   state.page = "exam";
   render();
@@ -908,7 +909,7 @@ function renderExamR() {
     h += "<div class=\"empty-state\"><div class=\"empty-icon\">&#x2705;</div><p>暂无错题，继续保持！</p></div>";
   } else {
     h += "<div style=\"display:flex;gap:8px;margin-bottom:16px;\">" +
-      "<button class=\"btn btn-primary btn-sm\" onclick=\"startWP()\">&#x1F504; 重新练习错题</button>" +
+      "<button class=\"btn btn-primary btn-sm\" onclick=\"startWP()\">&#x1F504; 错题训练</button>" +"<button class=\"btn btn-success btn-sm\" onclick=\"startWrongExam()\">&#x1F4DD; 错题模拟考</button>" +
       "<button class=\"btn btn-danger btn-sm\" onclick=\"if(confirm('确定清空所有错题？')){var ud=getUserData(state.user.username);ud.wrong={};saveUserData(state.user.username,ud);renderWB()}\">&#x1F5D1; 清空错题</button></div>";
     h += "<p class=\"text-muted mb-16\">共 " + wrongs.length + " 道错题</p>";
     var lb = ["A","B","C","D","E","F"];
@@ -929,6 +930,43 @@ function renderExamR() {
 
 var _wpState = { questions:[], idx:0, answers:{} };
 
+
+function startWrongExam() {
+  var ud = getUserData(state.user.username);
+  var wrongs = [];
+  for(var k in ud.wrong) {
+    if(ud.wrong.hasOwnProperty(k)) {
+      var w = ud.wrong[k];
+      var q = ALL_QUESTIONS.find(function(x) { return x.id === w.qId; });
+      if(q) wrongs.push(q);
+    }
+  }
+  if(wrongs.length === 0) { alert("暂无错题，无法进行错题模拟考"); return; }
+  var count = Math.min(wrongs.length, 50);
+  var shuffled = shuf(wrongs);
+  _examState.questions = shuffled.slice(0, count);
+  _examState.answers = {};
+  _examState.timeLeft = count * 60;
+  _examState.running = true;
+  state.page = "exam";
+  render();
+  if(_examState.timer) clearInterval(_examState.timer);
+  _examState.timer = setInterval(function() {
+    _examState.timeLeft--;
+    var timerEl = document.getElementById("examTimer");
+    if(timerEl) {
+      var m = Math.floor(_examState.timeLeft / 60);
+      var s = _examState.timeLeft % 60;
+      timerEl.textContent = String(m).padStart(2,"0") + ":" + String(s).padStart(2,"0");
+      if(_examState.timeLeft <= 60) timerEl.style.color = "#ef4444";
+    }
+    if(_examState.timeLeft <= 0) {
+      clearInterval(_examState.timer);
+      _examState.running = false;
+      submitExam();
+    }
+  }, 1000);
+}
 function startWP() {
   var ud = getUserData(state.user.username);
   var wrongs = [];
@@ -1001,6 +1039,12 @@ function wpAnswer(ch, qid, opt) {
   }
   saveUserData(state.user.username, ud);
   renderWP();
+  // 答对后自动跳转到下一题（错题训练）
+  if(q && opt === q.ans) {
+    if(_wpState.idx < _wpState.questions.length - 1) {
+      setTimeout(function() { wpNext(); }, 600);
+    }
+  }
 }
 
 function wpPrev() {
