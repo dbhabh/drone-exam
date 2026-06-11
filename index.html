@@ -995,7 +995,7 @@ function renderWP() {
   if(idx >= qs.length) idx = qs.length - 1;
   var q = qs[idx];
   var ud = getUserData(state.user.username);
-  var savedAns = ud.progress["ch"+q.ch] || {};
+  var savedAns = _wpState.answers || {};
   var sel = savedAns["q"+q.id];
   var lb = ["A","B","C","D","E","F"];
   var h = "<div class=\"wp-controls\">" +
@@ -1030,6 +1030,7 @@ function renderWP() {
 }
 
 function wpAnswer(ch, qid, opt) {
+  _wpState.answers["q"+qid] = opt;
   var ud = getUserData(state.user.username);
   if(!ud.progress["ch"+ch]) ud.progress["ch"+ch] = {};
   ud.progress["ch"+ch]["q"+qid] = opt;
